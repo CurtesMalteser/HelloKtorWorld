@@ -13,7 +13,14 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
         get("/hello") {
-            call.respondText("Hello World!")
+            if (call.request.queryParameters.contains("name")) {
+                call.request.queryParameters["name"]?.let {
+                    call.respondText("Hello $it!")
+                }
+            } else {
+                call.respondText("Hello World!")
+            }
         }
+
     }
 }
