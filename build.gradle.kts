@@ -25,7 +25,9 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("io.ktor:ktor-gson:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("com.google.code.gson:gson:2.8.6")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 }
 

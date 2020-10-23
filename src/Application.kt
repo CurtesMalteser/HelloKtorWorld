@@ -1,8 +1,9 @@
 package com.curtesmalteser
 
 import io.ktor.application.*
+import io.ktor.features.*
+import io.ktor.gson.*
 import io.ktor.response.*
-import io.ktor.request.*
 import io.ktor.routing.*
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -11,16 +12,20 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
 
+    install(ContentNegotiation) {
+        gson ()
+    }
+
     routing {
         get("/hello") {
             if (call.request.queryParameters.contains("name")) {
                 call.request.queryParameters["name"]?.let {
-                    call.respondText("Hello $it!")
+                    call.respond(mapOf("hello" to "Hello $it!"))
                 }
             } else {
-                call.respondText("Hello World!")
+                call.respond(mapOf("hello" to "Hello World!"))
             }
         }
-
     }
+
 }
