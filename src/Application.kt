@@ -3,8 +3,10 @@ package com.curtesmalteser
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.gson.*
+import io.ktor.http.cio.websocket.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.websocket.*
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -24,6 +26,18 @@ fun Application.module(testing: Boolean = false) {
                 }
             } else {
                 call.respond(mapOf("hello" to "Hello World!"))
+            }
+        }
+
+        webSocket("/chat") { // this: DefaultWebSocketSession
+            while (true) {
+                val frame = incoming.receive() // suspend
+                when (frame) {
+                    is Frame.Text -> {
+                        val text = frame.readText()
+                        outgoing.send(Frame.Text(text)) // suspend
+                    }
+                }
             }
         }
     }
